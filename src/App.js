@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import "./styles.css";
+import { connect } from 'react-redux';
+import { CLICK } from './store/action'
+import GameBoy from "./components/GameBoy";
+import PokeList from "./components/PokeList";
+import fetchPokemons from "./store/fetchPokemons";
 
-function App() {
+const App = ({ handleClick, fetchPokemons }) => {
+  useEffect(() => {
+    fetchPokemons()
+  }, [fetchPokemons])
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={()=>{ handleClick()}}>click</button>
+      <GameBoy />
+      <PokeList />
     </div>
   );
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    handleClick: () => dispatch({ type: CLICK }),
+    fetchPokemons: () => dispatch(fetchPokemons())
+  }
 }
 
-export default App;
+export default connect(null, mapDispatchToProps)(App );
