@@ -1,4 +1,4 @@
-import { CLICK, FETCH_POKEMON_SUCCESS, SHOW_POKEMON } from './action'
+import { CATCH_POKEMON, CLICK, FETCH_POKEMON_SUCCESS, SHOW_POKEMON } from './action'
 import initialState from './initialState';
 
 const reducer = (state = initialState, action) => {
@@ -17,6 +17,19 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         onScreen: action.onScreen
+      }
+    case CATCH_POKEMON:
+      return {
+        ...state,
+        pokemons: state.pokemons.map(poke => {
+          if (poke.id === state.onScreen.id) {
+            const isCaught = poke.captureRate + action.random
+            if (isCaught >= 255) {
+              return { ...poke, isCatch: true }
+            }
+          }
+          return poke
+        })
       }
     default:
       return state
